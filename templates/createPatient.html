@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Add Patient</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css"
+              rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+
+        <style>
+            input::-webkit-outer-spin-button,
+            input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+            }
+
+            /* Firefox */
+            input[type=number] {
+            -moz-appearance: textfield;}
+
+            input{
+                height: 40px;
+            }
+
+            input:focus{
+                border: 2px solid #0d6efd !important;
+                box-shadow: none !important;
+            }
+
+            .resp-card{
+                    width: 36rem;
+                }
+
+            @media (max-width: 1140px){
+                .resp-card{
+                    width: 100%;
+                }
+            }
+
+        </style>
+    </head>
+
+    <body style="background: rgba(13, 110, 253,0.85)">
+
+        <nav class="navbar bg-body-tertiary" style="border-bottom: 2px solid #0d6efd;">
+            <div class="container-fluid">
+                <div class="d-flex align-item-centre justify-content-between w-100">
+                      <a class="navbar-brand" href="/hospital">
+                        <div class="d-flex justify-content-center align-items-center" >
+                            <img style="height:28px !important ; margin-right: 8px;" src="https://img.freepik.com/free-vector/hospital-logo-design-vector-medical-cross_53876-136743.jpg" alt="Logo" width="30" height="24" class="d-inline-block align-text-top">
+                            Crucial Hospital
+                        </div>
+                      </a>
+                     <form method="post" action="/logout/">
+                         {% csrf_token %}
+                        <button type="submit" class="btn btn-primary" style="margin-right:20px">Logout</button>
+                     </form>
+                </div>
+            </div>
+        </nav>
+
+        <div class="container d-flex align-items-center justify-content-center"  style="height: calc(100vh - 60px);">
+
+            <div class="row ">
+<!--                display : flex-->
+                <div class="col justify-content-center d-flex" >
+                    <!-- card content  -->
+                    <div class="card shadow resp-card" style="border-radius: 10px;border: none;">
+                        <div class="card-body" style="padding: 24px;">
+                            <!-- form -->
+                            <form class="m-2" method="post">
+                                {% csrf_token %}
+                                <h3 class="mb-4">Add Patient</h3>
+
+                                <div class="row">
+                                    <div class=" col ">
+                                        <label class="form-label" >First Name</label>
+                                        {% if info %}
+                                        <input onkeydown="return /[a-z]/i.test(event.key)" type="text" class="form-control"  name="firstName" value="{% if info.firstName %}{{ info.firstName }}{% endif %}" required>
+                                        {% else %}
+                                        <input onkeydown="return /[a-z]/i.test(event.key)" type="text" class="form-control" name="firstName"  required>
+                                        {% endif %}
+
+                                      </div>
+
+                                      <div class=" col">
+                                        <label class="form-label" >Last Name</label>
+                                        {% if info %}
+                                        <input onkeydown="return /[a-z]/i.test(event.key)" type="text" class="form-control" name="lastName" value="{% if info.lastName %}{{ info.lastName }}{% endif %}" required>
+                                        {% else %}
+                                        <input onkeydown="return /[a-z]/i.test(event.key)" type="text" class="form-control" name="lastName" required>
+                                        {% endif %}
+                                      </div>
+                                </div>
+
+
+                                <div class="row mt-3">
+                                    <div class=" col ">
+                                        <label class="form-label">Phone</label>
+                                        {% if info %}
+                                        <input  type="number" class="form-control" name="phone" pattern="[1-9]{1}[0-9]{9}" value="{% if info.phone %}{{ info.phone }}{% endif %}"  required>
+                                        {% else %}
+                                        <input  type="number" class="form-control" name="phone" pattern="[1-9]{1}[0-9]{9}" required>
+                                        {% endif %}
+                                      </div>
+
+                                      <div class=" col">
+                                        <label class="form-label">Email</label>
+                                        {% if info %}
+                                        <input type="email" class="form-control" name="email" value="{% if info.email %}{{ info.email }}{% endif %}" required>
+                                        {% else %}
+                                        <input type="email" class="form-control" name="email" required>
+                                        {% endif %}
+                                      </div>
+                                </div>
+
+                                 <div class="row mt-3">
+                                    <div class=" col ">
+                                        <label  class="form-label">Disease</label>
+                                        {% if info %}
+                                        <input type="text" class="form-control" name="disease" value="{% if info.disease %}{{ info.disease }}{% endif %}" required>
+                                        {% else %}
+                                        <input type="text" class="form-control" name="disease" required>
+                                        {% endif %}
+                                    </div>
+
+                                     <div class="col" style="display:none">
+                                        <label class="form-label">DoctorId</label>
+                                        <input type="number" class="form-control" id="doctor" name="doctor"
+                                               value= "{% if doctor.id %}{{ doctor.id }}{% endif %}" readonly>
+                                    </div>
+                                </div>
+
+                                <button type="submit" class="btn btn-primary mt-4 w-100" style="padding : 9px 25px">Add Patient</button>
+                          </form>
+
+                            {% if messages %}
+                                  {% for message in messages %}
+                                      <div class="alert {{ message.tags }} m-2 mt-3" >
+                                            <p style="padding:0;margin:0">{{ message }}</p>
+                                      </div>
+                                  {% endfor %}
+                              {% endif %}
+
+                            <div class=" m-2 mt-4 text-center fw-semibold" onclick="hello()">
+                                <p>Manage Patients ? <a href="/" class="text" style="text-decoration: none;" >Go Back Home</a></p>
+                            </div>
+                          <!-- end form -->
+                        </div>
+                    </div>
+                    <!--end card content  -->
+                </div>
+
+            </div>
+
+        </div>
+
+        <script>
+            // javascript
+
+        </script>
+
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js"
+                integrity="sha384-zYPOMqeu1DAVkHiLqWBUTcbYfZ8osu1Nd6Z89ify25QV9guujx43ITvfi12/QExE" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.min.js"
+                integrity="sha384-Y4oOpwW3duJdCWv5ly8SCFYWqFDsfob/3GkgExXKV4idmbt98QcxXYs9UoXAB7BZ" crossorigin="anonymous"></script>
+    </body>
+</html>
+
+
